@@ -1,29 +1,30 @@
 /* Configurações gerais e tema escuro */
-body {
-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-background-color: #1e1e1e;
-color: #d4d4d4;
-margin: 0;
-padding: 20px;
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
 }
 
-/* Container principal que alinha as colunas */
 .container {
-display: flex;
-justify-content: center;
-gap: 25px;
-max-width: 1400px;
-margin: auto;
+    display: flex;
+    gap: 25px;
+    max-width: 1400px;
+    margin: auto;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 /* Estilo padrão para todas as colunas */
 .column {
-background-color: #252526;
-padding: 20px;
-border-radius: 8px;
-border: 1px solid #3a3a3a;
-display: flex;
-flex-direction: column;
+    background-color: #252526;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Tamanhos das colunas */
@@ -32,88 +33,145 @@ flex-direction: column;
 .users-column { flex: 1; }
 
 .users-column {
-gap: 20px;
+    gap: 20px;
 }
 
 /* Títulos */
 h2, h3 {
-color: #cccccc;
-border-bottom: 1px solid #3a3a3a;
-padding-bottom: 10px;
-margin-top: 0;
+    color: #cccccc;
+    border-bottom: 1px solid #3a3a3a;
+    padding-bottom: 10px;
+    margin-top: 0;
 }
 
 /* Estilos do formulário central */
 #item-form {
-display: flex;
-flex-direction: column;
-gap: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 #item-form label {
-font-weight: bold;
-color: #a0a0a0;
+    font-weight: bold;
+    color: #a0a0a0;
 }
 
-#item-form select,
 #item-form input {
-width: 100%;
-padding: 12px;
-border: 1px solid #3a3a3a;
-border-radius: 5px;
-background-color: #333333;
-color: #d4d4d4;
-box-sizing: border-box;
-font-size: 16px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #3a3a3a;
+    border-radius: 5px;
+    background-color: #333333;
+    color: #d4d4d4;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
 .item-input-container {
-display: flex;
-gap: 10px;
+    display: flex;
+    gap: 10px;
 }
 
-/* Campo de quantidade (qnd) */
 #item-quantity {
-width: 80px; /* Largura fixa para a quantidade */
+    width: 80px;
 }
 
-/* Campo de nome do item */
 #item-name {
-flex-grow: 1; /* Ocupa o resto do espaço */
+    flex-grow: 1;
 }
 
-#item-form button {
-padding: 15px;
-background-color: #0e639c;
-color: white;
-border: none;
-border-radius: 5px;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-margin-top: 10px;
-transition: background-color 0.2s;
+#item-form button[type="submit"] {
+    padding: 15px;
+    background-color: #0e639c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
 }
 
-#item-form button:hover {
-background-color: #157dc5;
+#item-form button[type="submit"]:hover {
+    background-color: #157dc5;
 }
 
-/* Caixas de conteúdo (histórico e itens dos jogadores) */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-selector {
+    flex-grow: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #3a3a3a;
+    background-color: #333333;
+    color: #d4d4d4;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-selector.selected {
+    background-color: #0e639c;
+    border-color: #157dc5;
+    font-weight: bold;
+}
+
+/* --- NOVOS ESTILOS PARA SUGESTÕES --- */
+.suggestion-group {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
+    gap: 8px;
+    margin-top: -5px; /* Pequeno ajuste para aproximar dos campos */
+}
+
+.btn-suggestion {
+    padding: 6px 12px;
+    font-size: 14px;
+    background-color: #4f4f52;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+    border-radius: 15px; /* Deixa os botões arredondados */
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-suggestion:hover {
+    background-color: #636366;
+}
+/* --- FIM DOS NOVOS ESTILOS --- */
+
+
 .log-box {
-background-color: #1e1e1e;
-border-radius: 5px;
-padding: 15px;
-flex-grow: 1; /* Faz a caixa ocupar todo o espaço vertical disponível */
-overflow-y: auto; /* Adiciona barra de rolagem se o conteúdo for grande */
+    background-color: #1e1e1e;
+    border-radius: 5px;
+    padding: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.log-box p {
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.log-box p:hover {
+    background-color: #3a3a3a;
 }
 
 .user-box {
-background-color: #252526;
-padding: 15px;
-border-radius: 8px;
-border: 1px solid #3a3a3a;
-display: flex;
-flex-direction: column;
-flex: 1;
+    background-color: #252526;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
 }

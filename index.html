@@ -1,65 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Controle de Baú</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Baú</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+    <div class="container">
 
-<div class="column history-column">
-<h2>Histórico de Transação</h2>
-<div id="history-log" class="log-box">
-</div>
-</div>
+        <div class="column history-column">
+            <h2>Histórico de Transação</h2>
+            <div id="history-log" class="log-box">
+                </div>
+        </div>
 
-<div class="column main-column">
-<h2>Registrar</h2>
-<form id="item-form">
-<label for="user-select">Quem:</label>
-<select id="user-select" name="user">
-<option value="Gabriel">Gabriel</option>
-<option value="Rafael">Rafael</option>
-</select>
+        <div class="column main-column">
+            <h2>Registrar</h2>
+            <form id="item-form">
+                <label>Quem:</label>
+                <div class="button-group" id="user-selector">
+                    <button type="button" class="btn-selector selected" data-user="Biel">Biel</button>
+                    <button type="button" class="btn-selector" data-user="Rafitos">Rafitos</button>
+                </div>
 
-<label for="action-select">Ação:</label>
-<select id="action-select" name="action">
-<option value="colocou">Colocando</option>
-<option value="tirou">Tirando</option>
-</select>
+                <label>Ação:</label>
+                <div class="button-group" id="action-selector">
+                    <button type="button" class="btn-selector selected" data-action="colocou">Colocando</button>
+                    <button type="button" class="btn-selector" data-action="tirou">Tirando</button>
+                </div>
 
-<label for="item-name">Item:</label>
-<div class="item-input-container">
-<input type="number" id="item-quantity" value="1" min="1">
-<input type="text" id="item-name" list="item-suggestions" placeholder="Nome do item..." required>
-<datalist id="item-suggestions">
-</datalist>
-</div>
+                <label for="item-name">Item:</label>
+                <div class="item-input-container">
+                    <input type="number" id="item-quantity" value="1" min="1">
+                    <input type="text" id="item-name" placeholder="Nome do item..." required>
+                </div>
+                
+                <div class="suggestion-group" id="suggestion-buttons">
+                    </div>
 
-<button type="submit">Registrar Ação</button>
-</form>
-</div>
+                <button type="submit">Registrar Ação</button>
+            </form>
+        </div>
 
-<div class="column users-column">
-<div class="user-box">
-<h3>Gabriel</h3>
-<div id="gabriel-items" class="log-box">
-</div>
-</div>
-<div class="user-box">
-<h3>Rafael</h3>
-<div id="rafael-items" class="log-box">
-</div>
-</div>
-</div>
+        <div class="column users-column">
+            <div class="user-box">
+                <h3>Biel</h3>
+                <div id="biel-items" class="log-box">
+                    </div>
+            </div>
+            <div class="user-box">
+                <h3>Rafitos</h3>
+                <div id="rafitos-items" class="log-box">
+                    </div>
+            </div>
+        </div>
 
-</div>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="script.js"></script>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
