@@ -10,12 +10,6 @@
 
     <div class="container">
 
-        <div class="column history-column">
-            <h2>Histórico de Transação</h2>
-            <div id="history-log" class="log-box">
-                </div>
-        </div>
-
         <div class="column main-column">
             <h2>Registrar</h2>
             <form id="item-form">
@@ -31,14 +25,23 @@
                     <button type="button" class="btn-selector" data-action="tirou">Tirando</button>
                 </div>
 
-                <label for="item-name">Item:</label>
+                <label>Item:</label>
+                <div id="item-selector" class="item-selector-group">
+                    <div class="button-group">
+                        <button type="button" class="btn-selector" data-item="Filé de Peixe-Boi">Filé de Peixe-Boi</button>
+                        <button type="button" class="btn-selector" data-item="Filé de Jacaré">Filé de Jacaré</button>
+                        <button type="button" class="btn-selector" data-item="Filé de Tartaruga">Filé de Tartaruga</button>
+                    </div>
+                    <div class="button-group-single">
+                         <button type="button" class="btn-selector selected" data-item="Dinheiro Sujo">Dinheiro Sujo</button>
+                    </div>
+                </div>
+
+
+                <label for="item-quantity">Quantidade:</label>
                 <div class="item-input-container">
                     <input type="number" id="item-quantity" value="1" min="1">
-                    <input type="text" id="item-name" placeholder="Nome do item..." required>
                 </div>
-                
-                <div class="suggestion-group" id="suggestion-buttons">
-                    </div>
 
                 <button type="submit">Registrar Ação</button>
             </form>
@@ -49,11 +52,39 @@
                 <h3>Biel</h3>
                 <div id="biel-items" class="log-box">
                     </div>
+                <div class="calculator-box">
+                     <div class="calc-item">
+                        <span>Valor dos Filés:</span>
+                        <span id="biel-files-value">R$ 0,00</span>
+                    </div>
+                    <div class="calc-item">
+                        <span>Total com Dinheiro Sujo:</span>
+                        <span id="biel-grand-total">R$ 0,00</span>
+                    </div>
+                    <div class="calc-item total">
+                        <span>Total Lavado (-15%):</span>
+                        <span id="biel-final-washed-value">R$ 0,00</span>
+                    </div>
+                </div>
             </div>
-            <div class="user-box">
+             <div class="user-box">
                 <h3>Rafitos</h3>
                 <div id="rafitos-items" class="log-box">
                     </div>
+                 <div class="calculator-box">
+                    <div class="calc-item">
+                        <span>Valor dos Filés:</span>
+                        <span id="rafitos-files-value">R$ 0,00</span>
+                    </div>
+                    <div class="calc-item">
+                        <span>Total com Dinheiro Sujo:</span>
+                        <span id="rafitos-grand-total">R$ 0,00</span>
+                    </div>
+                    <div class="calc-item total">
+                        <span>Total Lavado (-15%):</span>
+                        <span id="rafitos-final-washed-value">R$ 0,00</span>
+                    </div>
+                </div>
             </div>
         </div>
 

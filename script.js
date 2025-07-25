@@ -1,48 +1,67 @@
 // =================================================================
 // PASSO IMPORTANTE: COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
-// Substitua todo este bloco pelas chaves que você pegou do site.
 // =================================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyDKMNlXG2WER6rF4LsDrPgdReGLE1I9d9s",
-  authDomain: "registro-bau.firebaseapp.com",
-  projectId: "registro-bau",
-  storageBucket: "registro-bau.firebasestorage.app",
-  messagingSenderId: "854687018755",
-  appId: "1:854687018755:web:9a0d48b1ec97784a2b8336",
-  measurementId: "G-ZBWW6VSJLB"
+    apiKey: "AIzaSyDKMNlXG2WER6rF4LsDrPgdReGLE1I9d9s",
+    authDomain: "registro-bau.firebaseapp.com",
+    projectId: "registro-bau",
+    storageBucket: "registro-bau.firebasestorage.app",
+    messagingSenderId: "854687018755",
+    appId: "1:854687018755:web:9a0d48b1ec97784a2b8336",
+    measurementId: "G-ZBWW6VSJLB"
 };
 
 // Inicializa o Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+// VALORES ATUALIZADOS
+const ITEM_VALUES = {
+    "Filé de Peixe-Boi": 4200,
+    "Filé de Jacaré": 5100,
+    "Filé de Tartaruga": 1700,
+};
+
 // Referências para os elementos do HTML
 const itemForm = document.getElementById('item-form');
-const historyLog = document.getElementById('history-log');
-const bielItemsDiv = document.getElementById('biel-items');
-const rafitosItemsDiv = document.getElementById('rafitos-items'); // MUDANÇA DE NOME
-const suggestionButtonsDiv = document.getElementById('suggestion-buttons');
 const userSelector = document.getElementById('user-selector');
 const actionSelector = document.getElementById('action-selector');
+const itemSelector = document.getElementById('item-selector');
 
-// Lógica dos botões de seleção
-userSelector.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
-        userSelector.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-        e.target.classList.add('selected');
-    }
-});
+// Elementos do DOM para Biel
+const bielItemsDiv = document.getElementById('biel-items');
+const bielCalculator = {
+    filesValue: document.getElementById('biel-files-value'),
+    grandTotal: document.getElementById('biel-grand-total'),
+    finalWashed: document.getElementById('biel-final-washed-value')
+};
 
-actionSelector.addEventListener('click', (e) => {
-    if (e.target.tagName === 'BUTTON') {
-        actionSelector.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-        e.target.classList.add('selected');
-    }
-});
+// Elementos do DOM para Rafitos
+const rafitosItemsDiv = document.getElementById('rafitos-items');
+const rafitosCalculator = {
+    filesValue: document.getElementById('rafitos-files-value'),
+    grandTotal: document.getElementById('rafitos-grand-total'),
+    finalWashed: document.getElementById('rafitos-final-washed-value')
+};
+
+
+// Função genérica para lidar com a seleção de botões
+function handleSelector(selectorElement) {
+    selectorElement.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON' && e.target.closest('.item-selector-group, .button-group')) {
+            selectorElement.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }
+    });
+}
+
+handleSelector(userSelector);
+handleSelector(actionSelector);
+handleSelector(itemSelector);
 
 // Variáveis para guardar o estado do inventário
 let bielItems = {};
-let rafitosItems = {}; // MUDANÇA DE NOME
+let rafitosItems = {};
 
 // FUNÇÃO PRINCIPAL: REGISTRAR UMA AÇÃO
 itemForm.addEventListener('submit', (e) => {
@@ -50,16 +69,16 @@ itemForm.addEventListener('submit', (e) => {
 
     const user = userSelector.querySelector('.selected').dataset.user;
     const action = actionSelector.querySelector('.selected').dataset.action;
-    const itemName = document.getElementById('item-name').value.trim();
+    const itemName = itemSelector.querySelector('.selected').dataset.item;
     const quantity = parseInt(document.getElementById('item-quantity').value);
 
     if (!itemName || quantity <= 0) {
-        alert('Por favor, preencha o nome do item e a quantidade corretamente.');
+        alert('Por favor, preencha a quantidade corretamente.');
         return;
     }
 
     if (action === 'tirou') {
-        const currentInventory = (user === 'Biel') ? bielItems : rafitosItems; // MUDANÇA DE NOME
+        const currentInventory = (user === 'Biel') ? bielItems : rafitosItems;
         const availableQuantity = currentInventory[itemName] || 0;
 
         if (availableQuantity < quantity) {
@@ -76,8 +95,8 @@ itemForm.addEventListener('submit', (e) => {
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
         console.log('Transação registrada com sucesso!');
-        itemForm.reset();
-        document.getElementById('item-name').focus();
+        document.getElementById('item-quantity').value = 1;
+        document.getElementById('item-quantity').focus();
     }).catch((error) => {
         console.error("Erro ao registrar transação: ", error);
         alert('Ocorreu um erro ao registrar. Tente novamente.');
@@ -86,29 +105,15 @@ itemForm.addEventListener('submit', (e) => {
 
 
 // FUNÇÃO MÁGICA: OUVIR E ATUALIZAR TUDO EM TEMPO REAL
-db.collection('transacoes').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    // Limpeza inicial
-    historyLog.innerHTML = '';
+db.collection('transacoes').orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
     bielItemsDiv.innerHTML = '';
-    rafitosItemsDiv.innerHTML = ''; // MUDANÇA DE NOME
-    suggestionButtonsDiv.innerHTML = '';
+    rafitosItemsDiv.innerHTML = '';
     bielItems = {};
-    rafitosItems = {}; // MUDANÇA DE NOME
-    const itemFrequencies = {};
+    rafitosItems = {};
 
-    // Primeiro loop: preenche o histórico e conta a frequência dos itens
     snapshot.docs.forEach(doc => {
         const transacao = doc.data();
-        const logEntry = document.createElement('p');
-        logEntry.innerHTML = `<span>${transacao.user}</span> ${transacao.action} <span>${transacao.quantity}x ${transacao.itemName}</span>`;
-        historyLog.appendChild(logEntry);
-        itemFrequencies[transacao.itemName] = (itemFrequencies[transacao.itemName] || 0) + 1;
-    });
-    
-    // Segundo loop: calcula o inventário final
-    snapshot.docs.slice().reverse().forEach(doc => {
-        const transacao = doc.data();
-        const itemsList = transacao.user === 'Biel' ? bielItems : rafitosItems; // MUDANÇA DE NOME
+        const itemsList = transacao.user === 'Biel' ? bielItems : rafitosItems;
         const currentQty = itemsList[transacao.itemName] || 0;
 
         if (transacao.action === 'colocou') {
@@ -118,50 +123,53 @@ db.collection('transacoes').orderBy('timestamp', 'desc').onSnapshot((snapshot) =
         }
     });
 
-    // Função para exibir os itens nas caixas
     function displayItems(player, playerItems, divElement) {
         Object.keys(playerItems).sort().forEach(itemName => {
             const quantity = playerItems[itemName];
             if (quantity > 0) {
                 const itemEntry = document.createElement('p');
                 itemEntry.textContent = `${quantity}x ${itemName}`;
-                
-                // Evento de clique para preencher o formulário
                 itemEntry.addEventListener('click', () => {
-                    userSelector.querySelectorAll('button').forEach(btn => {
-                        btn.classList.toggle('selected', btn.dataset.user === player);
-                    });
-                    actionSelector.querySelectorAll('button').forEach(btn => {
-                        btn.classList.toggle('selected', btn.dataset.action === 'tirou');
-                    });
-                    document.getElementById('item-name').value = itemName;
-                    // --- MUDANÇA PRINCIPAL AQUI ---
-                    // Preenche com a quantidade total disponível do item
-                    document.getElementById('item-quantity').value = quantity; 
-                    document.getElementById('item-quantity').focus(); // Foca no campo de quantidade
+                    userSelector.querySelectorAll('button').forEach(btn => btn.classList.toggle('selected', btn.dataset.user === player));
+                    actionSelector.querySelector('[data-action="tirou"]').classList.add('selected');
+                    actionSelector.querySelector('[data-action="colocou"]').classList.remove('selected');
+                    itemSelector.querySelectorAll('button').forEach(btn => btn.classList.toggle('selected', btn.dataset.item === itemName));
+                    document.getElementById('item-quantity').value = quantity;
+                    document.getElementById('item-quantity').focus();
                 });
-
                 divElement.appendChild(itemEntry);
             }
         });
     }
 
-    displayItems('Biel', bielItems, bielItemsDiv);
-    displayItems('Rafitos', rafitosItems, rafitosItemsDiv); // MUDANÇA DE NOME
-    
-    // Gerar botões de sugestão
-    const sortedItems = Object.entries(itemFrequencies).sort((a, b) => b[1] - a[1]);
-    const topItems = sortedItems.slice(0, 4);
+    function updatePlayerCalculator(playerItems, calculatorElements) {
+        let grossFilesValue = 0;
+        const dirtyMoneyValue = playerItems['Dinheiro Sujo'] || 0;
 
-    topItems.forEach(([itemName, count]) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn-suggestion';
-        button.textContent = itemName;
-        button.addEventListener('click', () => {
-            document.getElementById('item-name').value = itemName;
-            document.getElementById('item-name').focus();
-        });
-        suggestionButtonsDiv.appendChild(button);
-    });
+        // Calcula o valor bruto dos filés
+        for (const itemName in playerItems) {
+            if (ITEM_VALUES[itemName]) {
+                grossFilesValue += playerItems[itemName] * ITEM_VALUES[itemName];
+            }
+        }
+        
+        // O valor total ANTES de qualquer lavagem
+        const totalGrossValue = grossFilesValue + dirtyMoneyValue;
+
+        // O valor final DEPOIS de aplicar a taxa de 15% sobre TUDO
+        const finalWashedValue = totalGrossValue * 0.85;
+
+        const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        // Atualiza a interface
+        calculatorElements.filesValue.textContent = formatCurrency(grossFilesValue);
+        calculatorElements.grandTotal.textContent = formatCurrency(totalGrossValue);
+        calculatorElements.finalWashed.textContent = formatCurrency(finalWashedValue);
+    }
+
+    displayItems('Biel', bielItems, bielItemsDiv);
+    displayItems('Rafitos', rafitosItems, rafitosItemsDiv);
+    
+    updatePlayerCalculator(bielItems, bielCalculator);
+    updatePlayerCalculator(rafitosItems, rafitosCalculator);
 });

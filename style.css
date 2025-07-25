@@ -28,13 +28,9 @@ html, body {
 }
 
 /* Tamanhos das colunas */
-.history-column { flex: 1; }
-.main-column { flex: 1.5; }
-.users-column { flex: 1; }
+.main-column { flex: 1.2; }
+.users-column { flex: 1.5; gap: 20px; }
 
-.users-column {
-    gap: 20px;
-}
 
 /* Títulos */
 h2, h3 {
@@ -67,16 +63,7 @@ h2, h3 {
     font-size: 16px;
 }
 
-.item-input-container {
-    display: flex;
-    gap: 10px;
-}
-
 #item-quantity {
-    width: 80px;
-}
-
-#item-name {
     flex-grow: 1;
 }
 
@@ -101,6 +88,15 @@ h2, h3 {
     display: flex;
     gap: 10px;
 }
+.button-group.wrap {
+    flex-wrap: wrap;
+}
+
+/* NOVO ESTILO PARA O BOTÃO INFERIOR */
+.button-group-single {
+    display: flex;
+    margin-top: 10px; /* Espaçamento adicionado */
+}
 
 .btn-selector {
     flex-grow: 1;
@@ -120,45 +116,21 @@ h2, h3 {
     font-weight: bold;
 }
 
-/* --- NOVOS ESTILOS PARA SUGESTÕES --- */
-.suggestion-group {
-    display: flex;
-    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
-    gap: 8px;
-    margin-top: -5px; /* Pequeno ajuste para aproximar dos campos */
-}
-
-.btn-suggestion {
-    padding: 6px 12px;
-    font-size: 14px;
-    background-color: #4f4f52;
-    color: #e0e0e0;
-    border: 1px solid #3a3a3a;
-    border-radius: 15px; /* Deixa os botões arredondados */
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-suggestion:hover {
-    background-color: #636366;
-}
-/* --- FIM DOS NOVOS ESTILOS --- */
-
-
 .log-box {
     background-color: #1e1e1e;
     border-radius: 5px;
     padding: 15px;
     flex-grow: 1;
     overflow-y: auto;
-    min-height: 0;
+    min-height: 100px; /* Garante uma altura mínima */
 }
 
 .log-box p {
     cursor: pointer;
-    padding: 4px;
+    padding: 8px;
     border-radius: 3px;
     transition: background-color 0.2s;
+    margin: 4px 0;
 }
 
 .log-box p:hover {
@@ -167,11 +139,45 @@ h2, h3 {
 
 .user-box {
     background-color: #252526;
-    padding: 15px;
-    border-radius: 8px;
     border: 1px solid #3a3a3a;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     flex: 1;
     min-height: 0;
+    padding: 20px;
+}
+
+/* --- ESTILOS PARA A CALCULADORA DENTRO DO CARD --- */
+.calculator-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 16px;
+    margin-top: 15px; /* Espaço entre a lista de itens e a calculadora */
+    border-top: 1px solid #3a3a3a;
+    padding-top: 15px;
+}
+
+.calc-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.calc-item span:first-child {
+    color: #a0a0a0;
+}
+
+.calc-item span:last-child {
+    font-weight: bold;
+}
+
+.calc-item .deduction {
+    color: #d16a6a;
+}
+
+.calc-item.total span:last-child {
+    color: #73c48f;
+    font-size: 18px;
 }
